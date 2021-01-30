@@ -47,3 +47,6 @@ Note: the project was tested in docker-desktop Kubernetes context, so your milea
 Carlos Costa, https://github.com/epilif1017a
 
 José Correia, https://github.com/jmcorreia 
+
+## How to Contribute?
+Open an issue and then follow that up with a PR :) 
