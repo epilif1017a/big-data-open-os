@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: hadoop-slaves
+  namespace: big-data-os
+  labels:
+    k8s-app: hadoop-slaves
+spec:
+  selector:
+    matchLabels:
+      name: hadoop-slaves
+  template:
+    metadata:
+      labels:
+        name: hadoop-slaves
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+      - name: hdfs-dn
+        image: path-to-my-registry/hdfs-dn:latest
+        ports:
+        - containerPort: 9864
+        - containerPort: 9866
+        - containerPort: 9867
+        resources:
+          limits:
+            cpu: 250m
+            memory: 2G
+          requests:
+            cpu: 50m
+            memory: 2G
+        volumeMounts:
+        - name: hdfs-dn-data
+          mountPath: /hdfs
+      - name: yarn-nm
+        image: path-to-my-registry/yarn-nm:latest
+        ports:
+        - containerPort: 8042
+        resources:
+          limits:
+            cpu: 250m
+            memory: 2G
+          requests:
+            cpu: 250m
+            memory: 2G
+        volumeMounts:
+        - name: yarn-nm-data
+          mountPath: /yarn
+      imagePullSecrets:
+      - name: regcred
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: hdfs-dn-data
+        hostPath:
+          path: /Users/big-data-os/hdfs-dn
+      - name: yarn-nm-data
+        hostPath:
+          path: /Users/big-data-os/yarn-nm

@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: hdfs-nn
+  namespace: big-data-os
+  labels:
+    app: hdfs-nn
+spec:
+  selector:
+    matchLabels:
+      app: hdfs-nn
+  serviceName: hdfs-nn
+  template:
+    metadata:
+      labels:
+        app: hdfs-nn
+    spec:
+      containers:
+      - name: hdfs-nn
+        image: path-to-my-registry/hdfs-nn:latest
+        command: ["/bin/sh", "-c"]
+        args: ["${HADOOP_HOME}/cbin/start-hdfs-nn.sh"]
+        # add --format to args if first time initating the cluster or if you want to format
+        ports:
+        - containerPort: 9000
+        - containerPort: 9870
+        resources:
+          limits:
+            cpu: 125m
+            memory: 1G
+          requests:
+            cpu: 50m
+            memory: 1G
+        volumeMounts:
+        - name: hdfs-nn-data
+          mountPath: /hdfs
+      imagePullSecrets:
+      - name: regcred
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: hdfs-nn-data
+        hostPath:
+          path: /Users/big-data-os/hdfs-nn
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hdfs-nn
+  labels:
+    app: hdfs-nn
+  namespace: big-data-os
+spec:
+  type: ClusterIP
+  selector:
+    app: hdfs-nn
+  ports:
+  - port: 9870
+    targetPort: 9870
+    name: hdfs-nn-ui
+  - port: 9000
+    targetPort: 9000
+    name: hdfs-nn-fs

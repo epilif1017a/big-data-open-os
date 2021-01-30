@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: yarn-ts
+  namespace: big-data-os
+  labels:
+    app: yarn-ts
+spec:
+  selector:
+    matchLabels:
+      app: yarn-ts
+  serviceName: yarn-ts
+  template:
+    metadata:
+      labels:
+        app: yarn-ts
+    spec:
+      containers:
+      - name: yarn-ts
+        image: path-to-my-registry/yarn-ts:latest
+        ports:
+        - containerPort: 8188
+        resources:
+          limits:
+            cpu: 125m
+            memory: 1G
+          requests:
+            cpu: 125m
+            memory: 1G
+        volumeMounts:
+        - name: yarn-ts-data
+          mountPath: /yarn
+      imagePullSecrets:
+      - name: regcred
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: yarn-ts-data
+        hostPath:
+          path:  /Users/big-data-os/yarn-ts
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: yarn-ts
+  labels:
+    app: yarn-ts
+  namespace: big-data-os
+spec:
+  type: ClusterIP
+  selector:
+    app: yarn-ts
+  ports:
+  - port: 8188
+    targetPort: 8188
+    name: yarn-ts

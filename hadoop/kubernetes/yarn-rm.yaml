@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: yarn-rm
+  namespace: big-data-os
+  labels:
+    app: yarn-rm
+spec:
+  selector:
+    matchLabels:
+      app: yarn-rm
+  serviceName: yarn-rm
+  template:
+    metadata:
+      labels:
+        app: yarn-rm
+    spec:
+      containers:
+      - name: yarn-rm
+        image: path-to-my-registry/yarn-rm:latest
+        ports:
+        - containerPort: 8088
+        - containerPort: 8030
+        - containerPort: 8031
+        - containerPort: 8032
+        resources:
+          limits:
+            cpu: 125m
+            memory: 1G
+          requests:
+            cpu: 125m
+            memory: 1G
+        volumeMounts:
+        - name: yarn-rm-data
+          mountPath: /yarn
+      imagePullSecrets:
+      - name: regcred
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: yarn-rm-data
+        hostPath:
+          path:  /Users/big-data-os/yarn-rm
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: yarn-rm
+  labels:
+    app: yarn-rm
+  namespace: big-data-os
+spec:
+  type: ClusterIP
+  selector:
+    app: yarn-rm
+  ports:
+  - port: 8088
+    targetPort: 8088
+    name: yarn-rm-ui
+  - port: 8030
+    targetPort: 8030
+    name: yarn-rm-scheduler
+  - port: 8031
+    targetPort: 8031
+    name: yarn-rm-resource-tracker
+  - port: 8032
+    targetPort: 8032
+    name: yarn-rm-ipc

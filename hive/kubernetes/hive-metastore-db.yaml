@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: hive-metastore-db
+  namespace: big-data-os
+  labels:
+    app: hive-metastore-db
+spec:
+  selector:
+    matchLabels:
+      app: hive-metastore-db
+  serviceName: hive-metastore-db  
+  template:
+    metadata:
+      labels:
+        app: hive-metastore-db
+    spec:
+      containers:
+      - image: mysql:5.7
+        name: hive-metastore-db
+        env:
+        # Ideally you should keep credentials out of the deployment file
+        - name: MYSQL_ROOT_PASSWORD
+          value: password
+        - name: MYSQL_DATABASE
+          value: hive
+        - name: MYSQL_USER
+          value: hive
+        - name: MYSQL_PASSWORD
+          value: hive
+        ports:
+        - containerPort: 3306
+          name: hive-meta-db
+        volumeMounts:
+        - name: hive-metastore-db-persistent-storage
+          mountPath: /var/lib/hive-metastore-db
+      volumes:
+      - name: hive-metastore-db-persistent-storage
+        hostPath:
+          path: /Users/big-data-os/hive-metastore-db
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hive-metastore-db
+  labels:
+    app: hive-metastore-db
+  namespace: big-data-os
+spec:
+  type: ClusterIP
+  selector:
+    app: hive-metastore-db
+  ports:
+  - port: 3306

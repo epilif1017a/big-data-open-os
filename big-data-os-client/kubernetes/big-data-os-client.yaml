@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: big-data-os-client
+  namespace: big-data-os
+spec:
+  containers:
+    - name: big-data-os-client
+      image: path-to-my-registry/big-data-os-client:latest
+      ports:
+        - containerPort: 4040
+      resources:
+          limits:
+            cpu: 500m
+            memory: 4G
+          requests:
+            cpu: 500m
+            memory: 4G
+      stdin: true
+      tty: true
+  imagePullSecrets:
+  - name: regcred
+  hostNetwork: true
+  dnsPolicy: ClusterFirstWithHostNet

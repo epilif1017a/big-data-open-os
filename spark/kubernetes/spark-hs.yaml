@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: spark-hs
+  namespace: big-data-os
+  labels:
+    app: spark-hs
+spec:
+  selector:
+    matchLabels:
+      app: spark-hs
+  serviceName: spark-hs
+  template:
+    metadata:
+      labels:
+        app: spark-hs
+    spec:
+      containers:
+      - name: spark-hs
+        image: path-to-my-registry/spark-hs:latest
+        ports:
+        - containerPort: 18080
+        resources:
+          limits:
+            cpu: 125m
+            memory: 1G
+          requests:
+            cpu: 125m
+            memory: 1G
+      imagePullSecrets:
+      - name: regcred
+      terminationGracePeriodSeconds: 30
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spark-hs
+  labels:
+    app: spark-hs
+  namespace: big-data-os
+spec:
+  type: ClusterIP
+  selector:
+    app: spark-hs
+  ports:
+  - port: 18080
+    targetPort: 18080
+    name: spark-hs

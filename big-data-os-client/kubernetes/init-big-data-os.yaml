@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: init-big-data-os
+  namespace: big-data-os
+spec:
+  template:
+    spec:
+      containers:
+      - name: init-big-data-os
+        image: path-to-my-registry/init-big-data-os:latest
+        command: ["/bin/sh", "-c"]
+        args: ["/home/${USER}/bin/init-fs.sh && /home/${USER}/bin/upload-spark-yarn-archive.sh"]
+      restartPolicy: Never
+      imagePullSecrets:
+      - name: regcred
+  backoffLimit: 1

@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: hive-metastore
+  namespace: big-data-os
+  labels:
+    app: hive-metastore
+spec:
+  selector:
+    matchLabels:
+      app: hive-metastore
+  serviceName: hive-metastore
+  template:
+    metadata:
+      labels:
+        app: hive-metastore
+    spec:
+      containers:
+      - name: hive-metastore
+        image: path-to-my-registry/hive-metastore:latest
+        ports:
+        - containerPort: 9083
+        resources:
+          limits:
+            cpu: 125m
+            memory: 1G
+          requests:
+            cpu: 125m
+            memory: 1G
+      imagePullSecrets:
+      - name: regcred
+      terminationGracePeriodSeconds: 30
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hive-metastore
+  labels:
+    app: hive-metastore
+  namespace: big-data-os
+spec:
+  type: ClusterIP
+  selector:
+    app: hive-metastore
+  ports:
+  - port: 9083
+    targetPort: 9083
+    name: hive-metastore
