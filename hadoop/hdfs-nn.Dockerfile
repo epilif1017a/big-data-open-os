@@ -4,7 +4,8 @@ COPY hadoop/bin/start-hdfs-nn.sh $HADOOP_HOME/cbin/
 RUN chmod 700 $HADOOP_HOME/cbin/start-hdfs-nn.sh
 RUN chown -R hdfs:hadoop $HADOOP_HOME
 
-RUN mkdir -p /hdfs
+RUN mkdir /hdfs
+RUN mkdir /hdfs/nn
 RUN chown -R hdfs:hadoop /hdfs
 
 # dfs.namenode.http-address
@@ -16,4 +17,4 @@ EXPOSE 9000
 
 USER hdfs
 
-ENTRYPOINT ${HADOOP_HOME}/cbin/start-hdfs-nn.sh
+ENTRYPOINT ${HADOOP_HOME}/cbin/start-hdfs-nn.sh --format

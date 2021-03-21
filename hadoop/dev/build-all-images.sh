@@ -14,5 +14,7 @@ docker build . -f ./hadoop/yarn-nm.Dockerfile -t yarn-nm &
 p4=$!
 docker build . -f ./hadoop/yarn-ts.Dockerfile -t yarn-ts &
 p5=$!
+docker build . -f ./big-data-os-client/big-data-os-client.Dockerfile -t big-data-os-client &
+p6=$!
 
-wait $p1 $p2 $p3 $p4 $p5
+wait $p1 $p2 $p3 $p4 $p5 $p6
