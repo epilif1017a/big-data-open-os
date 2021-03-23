@@ -17,4 +17,6 @@ EXPOSE 9000
 
 USER hdfs
 
-ENTRYPOINT ${HADOOP_HOME}/cbin/start-hdfs-nn.sh --format
+RUN $HADOOP_HOME/bin/hdfs namenode -format $CLUSTER_NAME
+
+ENTRYPOINT ${HADOOP_HOME}/cbin/start-hdfs-nn.sh
