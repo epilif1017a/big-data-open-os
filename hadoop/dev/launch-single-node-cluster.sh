@@ -1,6 +1,6 @@
 #!/bin/sh
 echo "removing possible leftovers..."
-docker container rm -f hdfs-nn hdfs-dn1 yarn-nm1 yarn-rm yarn-ts
+docker container rm -f hdfs-nn hdfs-dn1 yarn-nm1 yarn-rm yarn-ts init-fs
 docker network rm hadoop
 
 echo "creating hadoop network..."
@@ -18,7 +18,7 @@ echo "waiting for hdfs dn to be up..."
 sleep 30
 
 echo "creating folders and setting permissions..."
-docker run -it --network hadoop big-data-os-client /home/hdfs/bin/init-fs.sh
+docker run -it --name init-fs --network hadoop big-data-os-client /home/hdfs/bin/init-fs.sh
 
 #echo "uploading spark yarn archive"
 #docker run -it --network hadoop big-data-os-client /home/hdfs/bin/upload-spark-yarn-archive.sh

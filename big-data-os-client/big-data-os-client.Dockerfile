@@ -1,9 +1,10 @@
 FROM hadoop-base
 
 ENV USER=hdfs
-ENV SPARK_VERSION=3.1.2
-ENV HADOOP_VERSION=3.2
-ENV HIVE_VERSION=3.1.2
+ENV SPARK_VERSION=3.3.0
+ENV HADOOP_VERSION_SPARK=3
+ENV HADOOP_VERSION=3.3.4
+ENV HIVE_VERSION=3.1.3
 ENV SPARK_HOME=/spark
 ENV HIVE_HOME=/hive
 ENV JAVA_VERSION=1.8.0
@@ -20,9 +21,9 @@ RUN yum update -y && \
     yum install -y java-${JAVA_VERSION}-openjdk wget && \
     yum clean all && \
     rm -rf /var/cache/yum && \
-    wget https://downloads.apache.org/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz && \
-    tar --strip-components 1 -xzf spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz && \
-    rm -f spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz
+    wget https://downloads.apache.org/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION_SPARK}.tgz && \
+    tar --strip-components 1 -xzf spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION_SPARK}.tgz && \
+    rm -f spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION_SPARK}.tgz
 
 RUN chown -R ${USER}:hdfs $SPARK_HOME && \
     chown -R ${USER}:hdfs $HIVE_HOME && \
