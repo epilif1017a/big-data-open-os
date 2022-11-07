@@ -12,7 +12,7 @@ RUN yum update -y && \
     yum install -y java-${JAVA_VERSION}-openjdk wget zip && \
     yum clean all && \
     rm -rf /var/cache/yum && \
-    wget https://downloads.apache.org/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION_SPARK}.tgz && \
+    wget https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION_SPARK}.tgz && \
     tar --strip-components 1 -xzf spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION_SPARK}.tgz && \
     rm -f spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION_SPARK}.tgz
     
