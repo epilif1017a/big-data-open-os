@@ -12,7 +12,7 @@ ENV JAVA_HOME=/etc/alternatives/jre
 
 WORKDIR $HIVE_HOME
 
-RUN wget https://downloads.apache.org/hive/hive-${HIVE_VERSION}/apache-hive-${HIVE_VERSION}-bin.tar.gz && \
+RUN wget https://archive.apache.org/dist/hive/hive-${HIVE_VERSION}/apache-hive-${HIVE_VERSION}-bin.tar.gz && \
     tar --strip-components 1 -xzf apache-hive-${HIVE_VERSION}-bin.tar.gz
 
 WORKDIR $SPARK_HOME
